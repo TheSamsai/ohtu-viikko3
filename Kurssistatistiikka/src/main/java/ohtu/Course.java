@@ -14,8 +14,13 @@ import java.util.ArrayList;
 public class Course {
     private String name;
     private String fullName;
+    private String term;
+    private int year;
     private int[] exercises;
     private ArrayList<Submission> submissions;
+    private int totalAllSubmissions;
+    private int totalAllHours;
+    private int totalAllExercises;
     
     public Course() {
         this.submissions = new ArrayList<>();
@@ -35,6 +40,22 @@ public class Course {
     
     public String getFullName() {
         return this.fullName;
+    }
+    
+    public void setTerm(String term) {
+        this.term = term;
+    }
+    
+    public String getTerm() {
+        return this.term;
+    }
+    
+    public void setYear(int year) {
+        this.year = year;
+    }
+    
+    public int getYear() {
+        return this.year;
     }
     
     public void setExercises(int[] exercises) {
@@ -61,5 +82,29 @@ public class Course {
     
     public ArrayList<Submission> getSubmissions() {
         return this.submissions;
+    }
+    
+    public void setTotalAllSubmissions(int newTotal) {
+        this.totalAllSubmissions = newTotal;
+    }
+    
+    public int getTotalAllSubmissions() {
+        return this.totalAllSubmissions;
+    }
+    
+    public void setTotalAllExercises(int newTotal) {
+        this.totalAllExercises = newTotal;
+    }
+    
+    public int getTotalAllExercises() {
+        return this.totalAllExercises;
+    }
+    
+    public void setTotalAllHours(int newHours) {
+        this.totalAllHours = newHours;
+    }
+    
+    public int getTotalAllHours() {
+        return this.totalAllHours;
     }
 }

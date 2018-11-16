@@ -1,8 +1,13 @@
 package ohtu;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import java.io.IOException;
 import org.apache.http.client.fluent.Request;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.util.Map;
 
 public class Main {
 
@@ -26,7 +31,31 @@ public class Main {
         
         Course[] courses = mapper.fromJson(coursesBody, Course[].class);
         
+        JsonParser parser = new JsonParser();
+        
         for (Course course : courses) {
+            String statsUrl = "https://studies.cs.helsinki.fi/courses/" + course.getName() + "/stats";
+            
+            String statsBody = Request.Get(statsUrl).execute().returnContent().asString();
+            
+            JsonObject parsittuData = parser.parse(statsBody).getAsJsonObject();
+            
+            int submissions = 0;
+            int exercises = 0;
+            int hours = 0;
+            
+            for (Map.Entry<String, JsonElement> viikko : parsittuData.entrySet()) {
+                JsonObject viikkoObject = viikko.getValue().getAsJsonObject();
+                
+                submissions += viikkoObject.get("students").getAsInt();
+                exercises += viikkoObject.get("exercise_total").getAsInt();
+                hours += viikkoObject.get("hour_total").getAsInt();
+                
+            }
+            course.setTotalAllSubmissions(submissions);
+            course.setTotalAllExercises(exercises);
+            course.setTotalAllHours(hours);
+            
             for (Submission sub : subs) {
                 if (sub.getCourse().equals(course.getName())) {
                     course.addSubmission(sub);
@@ -41,7 +70,7 @@ public class Main {
                 continue;
             }
             
-            System.out.println(course.getFullName() + "\n");
+            System.out.println(course.getFullName() + " " + course.getTerm() + " " + course.getYear() + "\n");
             
             int tunnitYhteensa = 0;
             int tehtavatYhteensa = 0;
@@ -74,6 +103,8 @@ public class Main {
             }
             
             System.out.println("\nYhteensä " + tehtavatYhteensa + "/" + maxKurssiTehtavat + " tehtävää " + tunnitYhteensa + " tuntia\n");
+            
+            System.out.println("Kurssilla yhteensä " + course.getTotalAllSubmissions() + " palautusta, palautettuja tehtäviä " + course.getTotalAllExercises() + " kpl, aikaa käytetty yhteensä " + course.getTotalAllHours() + " tuntia\n");
         }
     }
 }
