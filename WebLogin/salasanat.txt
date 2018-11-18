@@ -1,0 +1,7 @@
+pekka;akkep
+jukka;akkuj
+seleniumTesting36405;password
+sami;samitesting
+seleniumTesting62604;password
+seleniumTesting96553;password
+petteri;asd1
